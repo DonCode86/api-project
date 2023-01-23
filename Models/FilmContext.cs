@@ -8,6 +8,6 @@ namespace api_project.Models
         { 
         }
 
-        DbSet<Film> Films { get; set; } = null!;
+        public DbSet<Film> Films { get; set; } = null!;
     }
 }
