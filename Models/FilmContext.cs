@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Infrastructure.Annotations;
 
 namespace api_project.Models
 {
@@ -8,6 +9,12 @@ namespace api_project.Models
         { 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Film>().HasIndex(u => u.Title).IsUnique();
+        }
         public DbSet<Film> Films { get; set; } = null!;
     }
 }
