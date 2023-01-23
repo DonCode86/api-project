@@ -14,7 +14,9 @@ namespace api_project.Models
             base.OnModelCreating(builder);
 
             builder.Entity<Film>().HasIndex(u => u.Title).IsUnique();
+            builder.Entity<Genre>().HasIndex(u => u.Name).IsUnique();
         }
         public DbSet<Film> Films { get; set; } = null!;
+        public DbSet<Genre> Genres { get; set; }
     }
 }
