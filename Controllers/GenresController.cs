@@ -54,7 +54,7 @@ namespace api_project.Controllers
             _dbContext.Genres.Add(genre);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetGenre), new { id = genre.Id }, genre);
+            return CreatedAtAction(nameof(GetGenre), new { id = genre.GenreId }, genre);
         }
 
         //PUT: api/Genres/5
@@ -62,7 +62,7 @@ namespace api_project.Controllers
 
         public async Task<IActionResult> PutGenre(int id, Genre genre)
         {
-            if (id != genre.Id)
+            if (id != genre.GenreId)
             {
                 return BadRequest();
             }
@@ -89,7 +89,7 @@ namespace api_project.Controllers
 
         private bool GenreExists(long id)
         {
-            return (_dbContext.Genres?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_dbContext.Genres?.Any(e => e.GenreId == id)).GetValueOrDefault();
         }
     }
 }

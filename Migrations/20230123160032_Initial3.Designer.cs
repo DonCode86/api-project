@@ -12,7 +12,7 @@ using api_project.Models;
 namespace apiproject.Migrations
 {
     [DbContext(typeof(FilmContext))]
-    [Migration("20230123142313_Initial3")]
+    [Migration("20230123160032_Initial3")]
     partial class Initial3
     {
         /// <inheritdoc />
@@ -25,6 +25,27 @@ namespace apiproject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Genre", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("GenreId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Genres");
+                });
+
             modelBuilder.Entity("api_project.Models.Film", b =>
                 {
                     b.Property<int>("Id")
@@ -33,21 +54,39 @@ namespace apiproject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Genre")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("GenreId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
+                    b.HasIndex("GenreId");
+
+                    b.HasIndex("Title")
                         .IsUnique();
 
                     b.ToTable("Films");
+                });
+
+            modelBuilder.Entity("api_project.Models.Film", b =>
+                {
+                    b.HasOne("Genre", "Genre")
+                        .WithMany("Films")
+                        .HasForeignKey("GenreId");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("Genre", b =>
+                {
+                    b.Navigation("Films");
                 });
 #pragma warning restore 612, 618
         }

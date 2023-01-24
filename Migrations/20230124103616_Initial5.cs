@@ -5,23 +5,24 @@
 namespace apiproject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial3 : Migration
+    public partial class Initial5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateIndex(
-                name: "IX_Films_Id",
+            migrationBuilder.AddColumn<string>(
+                name: "GenreName",
                 table: "Films",
-                column: "Id",
-                unique: true);
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Films_Id",
+            migrationBuilder.DropColumn(
+                name: "GenreName",
                 table: "Films");
         }
     }

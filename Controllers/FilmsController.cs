@@ -51,8 +51,16 @@ namespace api_project.Controllers
 
         public async Task<ActionResult<Film>> PostFilm(Film film)
         {
-            _dbContext.Films.Add(film);
-            await _dbContext.SaveChangesAsync();
+            var checkFilmGenreExists = _dbContext.Genres.Any(genre => genre.Name.Equals(film.GenreName));
+            if (checkFilmGenreExists)
+            {
+                _dbContext.Films.Add(film);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("Il genere non esiste");
+            }
 
             return CreatedAtAction(nameof(GetFilm), new {id=film.Id}, film);
         }
@@ -62,16 +70,26 @@ namespace api_project.Controllers
 
         public async Task<IActionResult> PutFilm(int id, Film film)
         {
+            var checkFilmGenreExists = _dbContext.Genres.Any(genre => genre.Name.Equals(film.GenreName));
+            
             if (id != film.Id)
             {
                 return BadRequest();
             }
 
+
             _dbContext.Entry(film).State = EntityState.Modified;
 
             try
             {
-                await _dbContext.SaveChangesAsync();
+                if(checkFilmGenreExists)
+                {
+                    await _dbContext.SaveChangesAsync();
+                }    
+                else
+                {
+                    return BadRequest("il genere non esiste");
+                }
             }
             catch (DbUpdateConcurrencyException) 
             { 
