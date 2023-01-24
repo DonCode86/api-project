@@ -109,5 +109,32 @@ namespace api_project.Controllers
         { 
             return (_dbContext.Films?.Any(e => e.Id== id)).GetValueOrDefault();
         }
+
+        // DELETE: api/Films/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
+            if (_dbContext.Films == null)
+            {
+                return NotFound();
+            }
+
+            var film = await _dbContext.Films.FindAsync(id);
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Films.Remove(film);
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool MovieExists(long id)
+        {
+            return (_dbContext.Films?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
     }
 }
+
